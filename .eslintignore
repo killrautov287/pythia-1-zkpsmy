@@ -1,0 +1,10 @@
+node_modules
+cache
+artifacts
+types/**
+lib
+pythia-1.wasm
+pythia-1.zkey
+Pythia1Verifier.sol
+build
+pythia-1_verification_key.json

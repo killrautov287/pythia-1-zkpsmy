@@ -1,0 +1,17 @@
+.vscode
+.DS_Store
+
+node_modules
+cache
+artifacts
+types
+deployments
+
+package-lock.json
+
+lib
+
+#pythia-s1.wasm
+#pythia-s1.zkey
+
+build
