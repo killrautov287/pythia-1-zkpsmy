@@ -39,9 +39,9 @@ $ yarn build
 ```sh
 $ yarn test
 $ test:circuits
-$ test:verifier-js
+$ test:verifier
 $ test:verifier-contract
-$ test:prover-js
+$ test:prover
 ```
 
 ## License
