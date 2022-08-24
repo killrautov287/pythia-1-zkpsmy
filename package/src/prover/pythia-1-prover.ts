@@ -8,12 +8,6 @@ import { SnarkProof } from "./snark-proof";
 
 export type CircuitPath = { wasmPath: string; zkeyPath: string } | null;
 
-export type HydraS1Account = {
-  identifier: BigNumberish;
-  secret: BigNumberish;
-  commitmentReceipt: [BigNumberish, BigNumberish, BigNumberish];
-};
-
 type UserParams = {
   secret: BigNumberish;
   destinationIdentifier: BigNumberish;
