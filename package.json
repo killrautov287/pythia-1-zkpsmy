@@ -1,18 +1,21 @@
 {
   "name": "Pythia-s1-zkps",
   "version": "1.0.0",
-  "description": "Pythia S1 ZK Proving Scheme",
+  "description": "Pythia 1 ZK Proving Scheme",
   "main": "index.js",
   "author": "Sismo core",
   "license": "MIT",
   "private": true,
   "scripts": {
-    "build": "yarn clean && yarn install && yarn compile-circuits",
+    "build": "yarn clean && yarn install && yarn compile-circuits && yarn compile-contracts && cd package && yarn && yarn build",
     "generate-contract": "./scripts/generate-contract.sh pythia-1",
     "compile-circuits": "./scripts/compile-circuit.sh pythia-1",
     "compile-contracts": "SKIP_LOAD=true hardhat compile",
     "test": "hardhat test",
     "test:circuits": "hardhat test ./test/circuits.test",
+    "test:verifier": "hardhat test ./test/verifier.test",
+    "test:verifier-contract": "hardhat test ./test/verifier-contract.test",
+    "test:prover": "hardhat test ./test/prover.test",
     "clean": "./scripts/clean.sh",
     "prettier": "prettier --write packages/**/*.ts test/**/*.ts tasks/**/*.ts",
     "lint": "eslint packages/**/*.ts test/**/*.ts --max-warnings=0"
