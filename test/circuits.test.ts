@@ -34,10 +34,15 @@ describe("Pythia 1 Circuits", async () => {
     it("Verify it can generate a snark proof", async () => {
       const secret = BigNumber.from("0x1234567890abcdef");
       const commitment = await poseidon([secret]);
+      const value = "0x10";
 
       const privateInputs = {
         secret,
-        signedCommitment: await commitmentSigner.signCommitment(commitment),
+        commitmentReceipt: await commitmentSigner.getCommitmentReceipt(
+          commitment,
+          value
+        ),
+        value: BigNumber.from(value),
       };
 
       const publicInputs = {
@@ -46,6 +51,8 @@ describe("Pythia 1 Circuits", async () => {
         commitmentSignerPubKey: await commitmentSigner.getPublicKey(),
         ticketIdentifier,
         userTicket: await computeUserTicket(secret, ticketIdentifier),
+        isStrict: false,
+        claimedValue: BigNumber.from(value).sub(1),
       };
 
       inputs = { ...privateInputs, ...publicInputs };
@@ -64,6 +71,21 @@ describe("Pythia 1 Circuits", async () => {
           ...{
             // change the secret
             secret: BigNumber.from("0x1"),
+          },
+        },
+        "Error: Assert Failed. Error in template ForceEqualIfEnabled"
+      );
+    });
+
+    it("Verify the value constraint", async () => {
+      await circuitShouldFail(
+        circuitTester,
+        {
+          ...inputs,
+          ...{
+            // change the value
+            value: BigNumber.from("0x1"), // the real one with the commitmentSigner is 0x10
+            claimedValue: BigNumber.from("0x1"),
           },
         },
         "Error: Assert Failed. Error in template ForceEqualIfEnabled"
@@ -91,12 +113,45 @@ describe("Pythia 1 Circuits", async () => {
           ...inputs,
           ...{
             // change the signature
-            signedCommitment: await commitmentSigner.signCommitment(
-              BigNumber.from("0x12")
+            commitmentReceipt: await commitmentSigner.getCommitmentReceipt(
+              BigNumber.from("0x12"), // commitment
+              "0x10" // value
             ),
           },
         },
         "Error: Assert Failed. Error in template ForceEqualIfEnabled"
+      );
+    });
+  });
+
+  describe("Verify the isStrict constraint", async () => {
+    it("With isStrict true, only equal value should be accepted", async () => {
+      await circuitShouldFail(
+        circuitTester,
+        {
+          ...inputs,
+          // change the ticketIdentifier, good one is 123
+          ...{
+            claimedValue: BigNumber.from(inputs.value).sub(1),
+            isStrict: true,
+          },
+        },
+        "Error: Assert Failed. Error in template pythia1"
+      );
+    });
+
+    it("With isStrict false, lower values should be accepted", async () => {
+      await circuitShouldFail(
+        circuitTester,
+        {
+          ...inputs,
+          // change the ticketIdentifier, good one is hash(secret, ticketIdentifier)
+          ...{
+            isStrict: false,
+            claimedValue: BigNumber.from(inputs.value).add(1),
+          },
+        },
+        "Error: Assert Failed. Error in template pythia1"
       );
     });
   });

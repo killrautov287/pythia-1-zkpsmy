@@ -21,8 +21,12 @@ export class CommitmentSignerTester {
     this.seed = seed;
   }
 
-  async signCommitment(commitment: BigNumberish): Promise<EddsaSignature> {
-    return (await this._getEddsaAccount()).sign(commitment);
+  async getCommitmentReceipt(
+    commitment: BigNumberish,
+    value: BigNumberish
+  ): Promise<EddsaSignature> {
+    const poseidon = await buildPoseidon();
+    return (await this._getEddsaAccount()).sign(poseidon([commitment, value]));
   }
 
   async getPublicKey(): Promise<EddsaPublicKey> {

@@ -24,25 +24,25 @@ pragma solidity >=0.7.0 <0.9.0;
 contract Pythia1Verifier {
     
     uint32 constant n =   32768;
-    uint16 constant nPublic =  6;
-    uint16 constant nLagrange = 6;
+    uint16 constant nPublic =  8;
+    uint16 constant nLagrange = 8;
     
-    uint256 constant Qmx = 19806320968698269367589468592600869349981230040637471235437049449426612645478;
-    uint256 constant Qmy = 11072233554473195867254507053148186710520632343010947601638934819304407918678;
-    uint256 constant Qlx = 15641171484504577938282895730808815825121741818503675661980644376607163681261;
-    uint256 constant Qly = 6840511749180886465387935962778645351516969302343776887141058980950572247437;
-    uint256 constant Qrx = 7347995971450628778258108141477072402149157820823198685028884228950546908688;
-    uint256 constant Qry = 743662887380840307081610758567869145505165095736771829021799329964690568293;
-    uint256 constant Qox = 6340210732846274995415895316179721043843679519847295098774197513592628187595;
-    uint256 constant Qoy = 13111821626786928419258053194718773388663047257544655578149934172229448493124;
-    uint256 constant Qcx = 6635458724003040296339609850533773714892440489485476274777258150871024349762;
-    uint256 constant Qcy = 13322635390404143028439914281025721580460173253455028481429387401497438014855;
-    uint256 constant S1x = 6193731668712147554770360264797737561424125284774812005086009239874062355630;
-    uint256 constant S1y = 10634658150350069764086295101166297262545966599080099585473090964694582179678;
-    uint256 constant S2x = 11444523565522768841227570625069774251362646141280625008747129142649053175623;
-    uint256 constant S2y = 17879176115723634237225046852479224175569792208022287963055571242084870272810;
-    uint256 constant S3x = 1837687390759586607131031401685847444625688527946160442878094245224941911528;
-    uint256 constant S3y = 4497134438268640693226897728732246359251502162486128517226068655180874878722;
+    uint256 constant Qmx = 2809696830523471432846451546705127752161492447360712801874875144940494526409;
+    uint256 constant Qmy = 11433713157998682823961606697817616921201764153699420798726459324947313961533;
+    uint256 constant Qlx = 12157228632215391838092189012232592646788028687965650769951155924440136395689;
+    uint256 constant Qly = 6064142328577193328146072912132793104773809750020112628218227177189775231716;
+    uint256 constant Qrx = 2431966391278395480977081462446185081945058768900772059426779561198289006355;
+    uint256 constant Qry = 1185588126734822280469813268353360385938872538362957313811543326018946506461;
+    uint256 constant Qox = 18363627115970163854462763400145922184407528417632094651312649059207506799412;
+    uint256 constant Qoy = 18719519346659496370745579703741783829028446557897513261218445493320914366950;
+    uint256 constant Qcx = 18585630291198380854521939298451311242610870040621382603137226622923298956326;
+    uint256 constant Qcy = 1054921401253909014346566691204724466335328577639580908976506115524927576497;
+    uint256 constant S1x = 13042780242275545477070185041235887242614938363333079063017699860854033451292;
+    uint256 constant S1y = 18155689745857441703029667460867362775099414147176158262510939036086442744659;
+    uint256 constant S2x = 6210053994320275411701751656938395265898654070592633210020837755341875644919;
+    uint256 constant S2y = 21144078586590119586055245317386229490122099648352607502925559317097316920354;
+    uint256 constant S3x = 19258826674910006595771116061168422494842829600513305348375291189049764625731;
+    uint256 constant S3y = 10745272526200735074989499804092806652976547114662521691025205747976644034223;
     uint256 constant k1 = 2;
     uint256 constant k2 = 3;
     uint256 constant X2x1 = 21831381940315734285607113342023901060522397560371972897001948545212302161822;
@@ -109,9 +109,13 @@ contract Pythia1Verifier {
     
     uint16 constant pEval_l6 = 832;
     
+    uint16 constant pEval_l7 = 864;
+    
+    uint16 constant pEval_l8 = 896;
     
     
-    uint16 constant lastMem = 864;
+    
+    uint16 constant lastMem = 928;
 
     function verifyProof(bytes memory proof, uint[] memory pubSignals) public view returns (bool) {
         assembly {
@@ -214,26 +218,30 @@ contract Pythia1Verifier {
                 let b
 
                 
-                mstore( add(pMem, 864 ), mload( add( pPublic, 32)))
+                mstore( add(pMem, 928 ), mload( add( pPublic, 32)))
                 
-                mstore( add(pMem, 896 ), mload( add( pPublic, 64)))
+                mstore( add(pMem, 960 ), mload( add( pPublic, 64)))
                 
-                mstore( add(pMem, 928 ), mload( add( pPublic, 96)))
+                mstore( add(pMem, 992 ), mload( add( pPublic, 96)))
                 
-                mstore( add(pMem, 960 ), mload( add( pPublic, 128)))
+                mstore( add(pMem, 1024 ), mload( add( pPublic, 128)))
                 
-                mstore( add(pMem, 992 ), mload( add( pPublic, 160)))
+                mstore( add(pMem, 1056 ), mload( add( pPublic, 160)))
                 
-                mstore( add(pMem, 1024 ), mload( add( pPublic, 192)))
+                mstore( add(pMem, 1088 ), mload( add( pPublic, 192)))
                 
-                mstore( add(pMem, 1056 ), mload( add( pProof, pA)))
-                mstore( add(pMem, 1088 ), mload( add( pProof, add(pA,32))))
-                mstore( add(pMem, 1120 ), mload( add( pProof, add(pA,64))))
-                mstore( add(pMem, 1152 ), mload( add( pProof, add(pA,96))))
-                mstore( add(pMem, 1184 ), mload( add( pProof, add(pA,128))))
-                mstore( add(pMem, 1216 ), mload( add( pProof, add(pA,160))))
+                mstore( add(pMem, 1120 ), mload( add( pPublic, 224)))
                 
-                b := mod(keccak256(add(pMem, lastMem), 384), q) 
+                mstore( add(pMem, 1152 ), mload( add( pPublic, 256)))
+                
+                mstore( add(pMem, 1184 ), mload( add( pProof, pA)))
+                mstore( add(pMem, 1216 ), mload( add( pProof, add(pA,32))))
+                mstore( add(pMem, 1248 ), mload( add( pProof, add(pA,64))))
+                mstore( add(pMem, 1280 ), mload( add( pProof, add(pA,96))))
+                mstore( add(pMem, 1312 ), mload( add( pProof, add(pA,128))))
+                mstore( add(pMem, 1344 ), mload( add( pProof, add(pA,160))))
+                
+                b := mod(keccak256(add(pMem, lastMem), 448), q) 
                 mstore( add(pMem, pBeta), b)
                 mstore( add(pMem, pGamma), mod(keccak256(add(pMem, pBeta), 32), q))
                 mstore( add(pMem, pAlpha), mod(keccak256(add(pProof, pZ), 64), q))
@@ -420,9 +428,51 @@ contract Pythia1Verifier {
                     )
                 )
                 
+                w := mulmod(w, w1, q)
                 
                 
-                inverseArray(add(pMem, pZhInv), 7 )
+                mstore(
+                    add(pMem, pEval_l7), 
+                    mulmod(
+                        n, 
+                        mod(
+                            add(
+                                sub(
+                                    mload(add(pMem, pXi)), 
+                                    w
+                                ), 
+                                q
+                            ),
+                            q
+                        ), 
+                        q
+                    )
+                )
+                
+                w := mulmod(w, w1, q)
+                
+                
+                mstore(
+                    add(pMem, pEval_l8), 
+                    mulmod(
+                        n, 
+                        mod(
+                            add(
+                                sub(
+                                    mload(add(pMem, pXi)), 
+                                    w
+                                ), 
+                                q
+                            ),
+                            q
+                        ), 
+                        q
+                    )
+                )
+                
+                
+                
+                inverseArray(add(pMem, pZhInv), 9 )
                 
                 let zh := mload(add(pMem, pZh))
                 w := 1
@@ -528,6 +578,42 @@ contract Pythia1Verifier {
                 )
                 
                 
+                w := mulmod(w, w1, q)
+                
+                
+                
+                mstore(
+                    add(pMem, pEval_l7), 
+                    mulmod(
+                        w,
+                        mulmod(
+                            mload(add(pMem, pEval_l7)),
+                            zh,
+                            q
+                        ),
+                        q
+                    )
+                )
+                
+                
+                w := mulmod(w, w1, q)
+                
+                
+                
+                mstore(
+                    add(pMem, pEval_l8), 
+                    mulmod(
+                        w,
+                        mulmod(
+                            mload(add(pMem, pEval_l8)),
+                            zh,
+                            q
+                        ),
+                        q
+                    )
+                )
+                
+                
                 
 
 
@@ -619,6 +705,36 @@ contract Pythia1Verifier {
                             mulmod(
                                 mload(add(pMem, pEval_l6)),
                                 mload(add(pPub, 192)),
+                                q
+                            )
+                        ),
+                        q
+                    ),
+                    q
+                )
+                 
+                pl := mod(
+                    add(
+                        sub(
+                            pl,  
+                            mulmod(
+                                mload(add(pMem, pEval_l7)),
+                                mload(add(pPub, 224)),
+                                q
+                            )
+                        ),
+                        q
+                    ),
+                    q
+                )
+                 
+                pl := mod(
+                    add(
+                        sub(
+                            pl,  
+                            mulmod(
+                                mload(add(pMem, pEval_l8)),
+                                mload(add(pPub, 256)),
                                 q
                             )
                         ),
