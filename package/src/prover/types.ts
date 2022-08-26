@@ -1,14 +1,18 @@
 export type PrivateInputs = {
-  secret: BigInt,
-  signedCommitment: [BigInt, BigInt, BigInt],
+  secret: BigInt;
+  value: BigInt;
+  commitmentReceipt: [BigInt, BigInt, BigInt];
 };
 
 export type PublicInputs = {
-  destinationIdentifier: BigInt,
-  chainId: BigInt,
-  commitmentSignerPubKey: [BigInt, BigInt],
-  ticketIdentifier: BigInt,
-  userTicket: BigInt,
+  destinationIdentifier: BigInt;
+  chainId: BigInt;
+  commitmentSignerPubKey: [BigInt, BigInt];
+  groupId: BigInt;
+  ticketIdentifier: BigInt;
+  userTicket: BigInt;
+  claimedValue: BigInt;
+  isStrict: boolean;
 };
 
 export type Inputs = {
