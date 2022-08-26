@@ -8,6 +8,7 @@ export type PublicInputs = {
   destinationIdentifier: BigInt;
   chainId: BigInt;
   commitmentSignerPubKey: [BigInt, BigInt];
+  groupId: BigInt;
   ticketIdentifier: BigInt;
   userTicket: BigInt;
   claimedValue: BigInt;

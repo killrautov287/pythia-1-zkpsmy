@@ -19,6 +19,7 @@ describe("Pythia 1 Prover", () => {
   let claimedValue: BigNumber;
   let isStrict: boolean;
   let chainId: number;
+  let groupId: BigNumber;
   let commitmentReceipt: [BigNumberish, BigNumberish, BigNumberish];
   let commitmentSignerPubKey: [BigNumberish, BigNumberish];
   let destinationIdentifier: string;
@@ -34,12 +35,14 @@ describe("Pythia 1 Prover", () => {
     commitment = await poseidon([secret]);
     value = BigNumber.from(10);
     claimedValue = BigNumber.from(9);
+    groupId = BigNumber.from("0x123");
     isStrict = false;
     chainId = 4;
     commitmentSigner = new CommitmentSignerTester();
     commitmentReceipt = await commitmentSigner.getCommitmentReceipt(
       commitment,
-      value
+      value,
+      groupId
     );
     commitmentSignerPubKey = await commitmentSigner.getPublicKey();
   });
@@ -52,6 +55,7 @@ describe("Pythia 1 Prover", () => {
       chainId,
       commitmentReceipt,
       commitmentSignerPubKey,
+      groupId,
       ticketIdentifier,
       claimedValue,
       isStrict,
@@ -63,6 +67,7 @@ describe("Pythia 1 Prover", () => {
       "4",
       "19216562053331156600902255696246737271139353859029593594381038465017562799534",
       "13097183428542854523945410083164577096626657763061760561768888547173748384322",
+      "291",
       "123",
       "4927655655099699900486263475166215352995660764281559606704696990727390837743",
       "9",
@@ -155,6 +160,38 @@ describe("Pythia 1 Prover", () => {
       });
     } catch (e: any) {
       expect(e.message).to.equal("Invalid signed commitment");
+    }
+  });
+
+  it("Should throw when sending claimedValue > sourceValue", async () => {
+    try {
+      await prover.generateSnarkProof({
+        ...correctInputs,
+        isStrict: false,
+        claimedValue: value.add(1),
+      });
+    } catch (e: any) {
+      expect(e.message).to.equal(
+        `Claimed value ${BigNumber.from(
+          11
+        ).toHexString()} can't be superior to Source value`
+      );
+    }
+  });
+
+  it("Should throw when sending claimedValue is not equal to sourceValue and isStrict == 1", async () => {
+    try {
+      await prover.generateSnarkProof({
+        ...correctInputs,
+        isStrict: true,
+        claimedValue: value.sub(1),
+      });
+    } catch (e: any) {
+      expect(e.message).to.equal(
+        `Claimed value ${BigNumber.from(
+          9
+        ).toHexString()} must be equal with Source value when isStrict == 1`
+      );
     }
   });
 });

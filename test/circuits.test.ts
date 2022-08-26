@@ -35,12 +35,14 @@ describe("Pythia 1 Circuits", async () => {
       const secret = BigNumber.from("0x1234567890abcdef");
       const commitment = await poseidon([secret]);
       const value = "0x10";
+      const groupId = "0x123";
 
       const privateInputs = {
         secret,
         commitmentReceipt: await commitmentSigner.getCommitmentReceipt(
           commitment,
-          value
+          value,
+          groupId
         ),
         value: BigNumber.from(value),
       };
@@ -49,6 +51,7 @@ describe("Pythia 1 Circuits", async () => {
         destinationIdentifier: BigNumber.from(destinationAccount.address), // arbitrary, no constraint
         chainId: 4, // arbitrary, no constraint
         commitmentSignerPubKey: await commitmentSigner.getPublicKey(),
+        groupId,
         ticketIdentifier,
         userTicket: await computeUserTicket(secret, ticketIdentifier),
         isStrict: false,
@@ -106,6 +109,20 @@ describe("Pythia 1 Circuits", async () => {
       );
     });
 
+    it("Verify the commitment signer groupId constraint", async () => {
+      await circuitShouldFail(
+        circuitTester,
+        {
+          ...inputs,
+          ...{
+            // change the groupId
+            groupId: "0x1234",
+          },
+        },
+        "Error: Assert Failed. Error in template ForceEqualIfEnabled"
+      );
+    });
+
     it("Verify the commitment signer signature constraint", async () => {
       await circuitShouldFail(
         circuitTester,
@@ -115,7 +132,8 @@ describe("Pythia 1 Circuits", async () => {
             // change the signature
             commitmentReceipt: await commitmentSigner.getCommitmentReceipt(
               BigNumber.from("0x12"), // commitment
-              "0x10" // value
+              "0x10", // value,
+              "0x123" // groupId
             ),
           },
         },

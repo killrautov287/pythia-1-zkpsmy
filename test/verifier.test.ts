@@ -20,6 +20,7 @@ describe("Pythia 1 Verifier", () => {
   let chainId: number;
   let commitmentReceipt: [BigNumberish, BigNumberish, BigNumberish];
   let commitmentSignerPubKey: [BigNumberish, BigNumberish];
+  let groupId: BigNumber;
   let destinationIdentifier: string;
   let proof: any;
   let input: any;
@@ -35,10 +36,12 @@ describe("Pythia 1 Verifier", () => {
     value = BigNumber.from(10);
     claimedValue = BigNumber.from(9);
     chainId = 4;
+    groupId = BigNumber.from("0x123");
     commitmentSigner = new CommitmentSignerTester();
     commitmentReceipt = await commitmentSigner.getCommitmentReceipt(
       commitment,
-      value
+      value,
+      groupId
     );
     commitmentSignerPubKey = await commitmentSigner.getPublicKey();
   });
@@ -51,6 +54,7 @@ describe("Pythia 1 Verifier", () => {
       chainId,
       commitmentReceipt,
       commitmentSignerPubKey,
+      groupId,
       ticketIdentifier,
       claimedValue,
       isStrict: false,

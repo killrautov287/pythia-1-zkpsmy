@@ -17,6 +17,7 @@ template pythia1() {
   signal input destinationIdentifier;
   signal input chainId;
   signal input commitmentSignerPubKey[2];
+  signal input groupId;
   signal input ticketIdentifier;
   signal input userTicket;
   signal input claimedValue;
@@ -29,9 +30,10 @@ template pythia1() {
 
   // Create the commitment mapping that was signed to create the 
   // commitment receipt 
-  component commitmentMapping = Poseidon(2);
+  component commitmentMapping = Poseidon(3);
   commitmentMapping.inputs[0] <== commitment.out;
   commitmentMapping.inputs[1] <== value;
+  commitmentMapping.inputs[2] <== groupId;
 
   // Verify the signed commitment from the commitmentSigner
   // of the given commitmentSignerPubKey
@@ -74,4 +76,4 @@ template pythia1() {
   destinationIdentifierSquare <== destinationIdentifier * destinationIdentifier;
 }
 
-component main {public [destinationIdentifier, chainId, commitmentSignerPubKey, ticketIdentifier, userTicket, claimedValue, isStrict]} = pythia1();
+component main {public [destinationIdentifier, chainId, commitmentSignerPubKey, groupId, ticketIdentifier, userTicket, claimedValue, isStrict]} = pythia1();

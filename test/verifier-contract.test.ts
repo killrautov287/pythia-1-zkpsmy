@@ -22,6 +22,7 @@ describe("Pythia 1 Verifier contract", () => {
   let chainId: number;
   let commitmentReceipt: [BigNumberish, BigNumberish, BigNumberish];
   let commitmentSignerPubKey: [BigNumberish, BigNumberish];
+  let groupId: BigNumber;
   let destinationIdentifier: string;
   let pythia1VerifierContract: Pythia1Verifier;
   let snarkProof: SnarkProof;
@@ -36,11 +37,13 @@ describe("Pythia 1 Verifier contract", () => {
     commitment = await poseidon([secret]);
     value = BigNumber.from(10);
     claimedValue = BigNumber.from(9);
+    groupId = BigNumber.from("0x123");
     chainId = 4;
     commitmentSigner = new CommitmentSignerTester();
     commitmentReceipt = await commitmentSigner.getCommitmentReceipt(
       commitment,
-      value
+      value,
+      groupId
     );
     commitmentSignerPubKey = await commitmentSigner.getPublicKey();
 
@@ -66,6 +69,7 @@ describe("Pythia 1 Verifier contract", () => {
       chainId,
       commitmentReceipt,
       commitmentSignerPubKey,
+      groupId,
       ticketIdentifier,
       claimedValue,
       isStrict: false,

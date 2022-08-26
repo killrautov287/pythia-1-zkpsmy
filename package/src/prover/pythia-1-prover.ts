@@ -15,6 +15,7 @@ export type UserParams = {
   chainId: BigNumberish;
   commitmentReceipt: [BigNumberish, BigNumberish, BigNumberish];
   commitmentSignerPubKey: [BigNumberish, BigNumberish];
+  groupId: BigNumberish;
   ticketIdentifier: BigNumberish;
   claimedValue: BigNumberish;
   isStrict: boolean;
@@ -33,6 +34,7 @@ export class Pythia1Prover {
     destinationIdentifier,
     chainId,
     commitmentReceipt,
+    groupId,
     commitmentSignerPubKey,
     ticketIdentifier,
     claimedValue,
@@ -50,6 +52,7 @@ export class Pythia1Prover {
     commitmentSignerPubKey = commitmentSignerPubKey.map((el) =>
       BigNumber.from(el)
     ) as [BigNumber, BigNumber];
+    groupId = BigNumber.from(groupId);
     ticketIdentifier = BigNumber.from(ticketIdentifier);
     claimedValue = BigNumber.from(claimedValue);
 
@@ -69,6 +72,7 @@ export class Pythia1Prover {
       commitmentSignerPubKey: commitmentSignerPubKey.map((el) =>
         (el as BigNumber).toBigInt()
       ) as unknown as [BigInt, BigInt],
+      groupId: groupId.toBigInt(),
       ticketIdentifier: ticketIdentifier.toBigInt(),
       userTicket: poseidon([secret, ticketIdentifier]).toBigInt(),
       claimedValue: claimedValue.toBigInt(),
@@ -88,6 +92,7 @@ export class Pythia1Prover {
     chainId,
     commitmentReceipt,
     commitmentSignerPubKey,
+    groupId,
     ticketIdentifier,
     claimedValue,
     isStrict,
@@ -98,6 +103,7 @@ export class Pythia1Prover {
     chainId = BigNumber.from(chainId);
     value = BigNumber.from(value);
     claimedValue = BigNumber.from(claimedValue);
+    groupId = BigNumber.from(groupId);
 
     const SnarkField = BigNumber.from(SNARK_FIELD);
     if (ticketIdentifier.gt(SnarkField)) {
@@ -119,6 +125,7 @@ export class Pythia1Prover {
     const isSourceCommitmentValid = await verifyCommitment(
       secret,
       value,
+      groupId,
       commitmentReceipt,
       commitmentSignerPubKey
     );
@@ -150,6 +157,7 @@ export class Pythia1Prover {
     chainId,
     commitmentReceipt,
     commitmentSignerPubKey,
+    groupId,
     ticketIdentifier,
     claimedValue,
     isStrict,
@@ -161,6 +169,7 @@ export class Pythia1Prover {
       chainId,
       commitmentReceipt,
       commitmentSignerPubKey,
+      groupId,
       ticketIdentifier,
       claimedValue,
       isStrict,
@@ -173,6 +182,7 @@ export class Pythia1Prover {
       chainId,
       commitmentReceipt,
       commitmentSignerPubKey,
+      groupId,
       ticketIdentifier,
       claimedValue,
       isStrict,
