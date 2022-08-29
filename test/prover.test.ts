@@ -60,9 +60,9 @@ describe("Pythia 1 Prover", () => {
       claimedValue,
       isStrict,
     };
-    const { proof, input } = await prover.generateSnarkProof(correctInputs);
+    const snarkProof = await prover.generateSnarkProof(correctInputs);
 
-    expect(input).to.deep.equal([
+    expect(snarkProof.input).to.deep.equal([
       "673047715095758362594529529292136844079929406274",
       "4",
       "19216562053331156600902255696246737271139353859029593594381038465017562799534",

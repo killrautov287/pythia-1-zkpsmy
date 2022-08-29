@@ -7,7 +7,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "build": "yarn clean && yarn install && yarn compile-circuits && yarn compile-contracts && cd package && yarn && yarn build",
+    "build": "yarn clean && yarn install && yarn compile-circuits && yarn generate-contract && yarn compile-contracts && cd package && yarn && yarn build",
     "generate-contract": "./scripts/generate-contract.sh pythia-1",
     "compile-circuits": "./scripts/compile-circuit.sh pythia-1",
     "compile-contracts": "SKIP_LOAD=true hardhat compile",

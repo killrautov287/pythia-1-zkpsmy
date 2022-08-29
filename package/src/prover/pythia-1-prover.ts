@@ -3,7 +3,7 @@ import { BigNumber, BigNumberish } from "ethers";
 import { Inputs, PrivateInputs, PublicInputs } from "./types";
 import { wasmPath, zkeyPath } from "./files";
 import { verifyCommitment } from "./utils/verify-commitment";
-import { plonk } from "snarkjs";
+import { groth16 } from "snarkjs";
 import { SnarkProof } from "./snark-proof";
 
 export type CircuitPath = { wasmPath: string; zkeyPath: string } | null;
@@ -161,7 +161,7 @@ export class Pythia1Prover {
     ticketIdentifier,
     claimedValue,
     isStrict,
-  }: UserParams): Promise<any> {
+  }: UserParams): Promise<SnarkProof> {
     await this.userParamsValidation({
       secret,
       value,
@@ -198,7 +198,7 @@ export class Pythia1Prover {
       };
     }
 
-    const { proof, publicSignals } = await plonk.fullProve(
+    const { proof, publicSignals } = await groth16.fullProve(
       { ...privateInputs, ...publicInputs },
       files.wasmPath,
       files.zkeyPath

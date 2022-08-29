@@ -77,11 +77,7 @@ describe("Pythia 1 Verifier contract", () => {
   });
 
   it("Should be able to verify the proof using the verifier", async () => {
-    const proofBytes = await snarkProof.toProofBytes();
-    const isValidContract = await pythia1VerifierContract.verifyProof(
-      proofBytes,
-      snarkProof.input
-    );
+    const isValidContract = await pythia1VerifierContract.verifyProof(snarkProof.a, snarkProof.b, snarkProof.c, snarkProof.input);
     expect(isValidContract).to.equals(true);
   });
 });
