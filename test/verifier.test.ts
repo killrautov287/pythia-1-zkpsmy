@@ -3,7 +3,7 @@ import { BigNumber, BigNumberish } from "ethers";
 import { Pythia1Verifier } from "../package/src/verifier";
 import { expect } from "chai";
 import { buildPoseidon, Poseidon } from "@sismo-core/crypto";
-import { Pythia1Prover } from "../package/src";
+import { Pythia1Prover, SnarkProof } from "../package/src";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { CommitmentSignerTester } from "./pythia-1-helper";
 
@@ -22,8 +22,7 @@ describe("Pythia 1 Verifier", () => {
   let commitmentSignerPubKey: [BigNumberish, BigNumberish];
   let groupId: BigNumber;
   let destinationIdentifier: string;
-  let proof: any;
-  let input: any;
+  let snarkProof: SnarkProof;
 
   before(async () => {
     poseidon = await buildPoseidon();
@@ -47,7 +46,7 @@ describe("Pythia 1 Verifier", () => {
   });
 
   it("Should be able to generate the proof using the prover package", async () => {
-    const SnarkProof = await prover.generateSnarkProof({
+    snarkProof = await prover.generateSnarkProof({
       secret,
       value,
       destinationIdentifier,
@@ -59,20 +58,20 @@ describe("Pythia 1 Verifier", () => {
       claimedValue,
       isStrict: false,
     });
-    proof = SnarkProof.proof;
-    input = SnarkProof.input;
   });
 
   it("Should be able to verify the proof using the verifier", async () => {
-    const isValidOffChain = await Pythia1Verifier.verifyProof(proof, input);
+    const isValidOffChain = await Pythia1Verifier.verifyProof(snarkProof.a, snarkProof.b, snarkProof.c, snarkProof.input);
     expect(isValidOffChain).to.equals(true);
   });
 
   it("Should change a public input and expect the verifier to revert", async () => {
-    const invalidInput = input;
-    invalidInput[0] = "123";
+    const invalidInput = snarkProof.input;
+    invalidInput[0] = BigNumber.from(123);
     const isValidOffChain = await Pythia1Verifier.verifyProof(
-      proof,
+      snarkProof.a, 
+      snarkProof.b, 
+      snarkProof.c, 
       invalidInput
     );
     expect(isValidOffChain).to.equals(false);
